@@ -15,7 +15,7 @@ Aplikacja Flask do zarządzania planem lekcji. Pozwala użytkownikom na:
 ### 2. Instalacja
 
 1. **Klonuj projekt:**
-git clone https://github.com/Zbvchu/Generator_Planu.git__
+git clone https://github.com/Zbvchu/Generator_Planu.git  
 cd plan-lekcji
 2. **Zainstaluj zależności: Użyj poniższej komendy, aby zainstalować wszystkie wymagane biblioteki:**
 pip install -r requirements.txt
@@ -26,5 +26,5 @@ python app.py
 2. **Otwórz przeglądarkę i przejdź do:**
 http://127.0.0.1:5000/
 3. **Zaloguj Sie**
-Login:admin__
+Login:admin  
 Hasło:admin
