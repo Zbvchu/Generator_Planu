@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Panel Główny</h2>
+
+<form method="POST" class="mb-3">
+    <label for="klasa" class="form-label">Wybierz klasę:</label>
+    <select class="form-select" id="klasa" name="klasa" onchange="this.form.submit()">
+        {% for klasa in klasy %}
+        <option value="{{ klasa }}" {% if wybrana_klasa == klasa %}selected{% endif %}>{{ klasa }}</option>
+        {% endfor %}
+    </select>
+</form>
+
+<h3>Plan lekcji dla klasy {{ wybrana_klasa }}</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Klasa</th>
+            <th>Dzień</th>
+            <th>Godzina</th>
+            <th>Przedmiot</th>
+            <th>Nauczyciel</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lekcja in plan %}
+        <tr>
+            <td>{{ lekcja[1] }}</td>
+            <td>{{ lekcja[2] }}</td>
+            <td>{{ lekcja[3] }}</td>
+            <td>{{ lekcja[4] }}</td>
+            <td>
+                {% if konflikty.get(lekcja[2], {}).get(lekcja[3], [])|length > 0 and lekcja[5] in konflikty[lekcja[2]][lekcja[3]] %}
+                <span style="color: red;">{{ lekcja[5] }}</span>
+                {% else %}
+                {{ lekcja[5] }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Konflikty zajęć:</h3>
+{% if konflikty %}
+    {% for dzien, godziny in konflikty.items() %}
+    <h4>{{ dzien }}</h4>
+    <ul>
+        {% for godzina, nauczyciele in godziny.items() %}
+        <li>
+            <strong>Godzina: {{ godzina }}</strong> — <span style="color: red;">{{ nauczyciele | join(', ') }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+{% else %}
+    <p>Brak konfliktów w harmonogramie.</p>
+{% endif %}
+{% endblock %}

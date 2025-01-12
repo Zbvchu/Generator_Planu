@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edycja Planu Lekcji</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Klasa</th>
+            <th>Dzień</th>
+            <th>Godzina</th>
+            <th>Przedmiot</th>
+            <th>Obecny Nauczyciel</th>
+            <th>Nowy Nauczyciel</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lekcja in plan %}
+        <tr>
+            <td>{{ lekcja[1] }}</td>
+            <td>{{ lekcja[2] }}</td>
+            <td>{{ lekcja[3] }}</td>
+            <td>{{ lekcja[4] }}</td>
+            <td>
+                {% if konflikty.get(lekcja[2], {}).get(lekcja[3], [])|length > 0 and lekcja[5] in konflikty[lekcja[2]][lekcja[3]] %}
+                <span style="color: red;">{{ lekcja[5] }}</span>
+                {% else %}
+                {{ lekcja[5] }}
+                {% endif %}
+            </td>
+            <td>
+                <form method="POST" style="display: flex; align-items: center;">
+                    <input type="hidden" name="klasa" value="{{ lekcja[1] }}">
+                    <input type="hidden" name="dzien" value="{{ lekcja[2] }}">
+                    <input type="hidden" name="godzina" value="{{ lekcja[3] }}">
+                    <select name="nauczyciel" class="form-select me-2">
+                        {% for nauczyciel in dostepni_nauczyciele[(lekcja[2], lekcja[3])] %}
+                        <option value="{{ nauczyciel }}" {% if nauczyciel == lekcja[5] %}selected{% endif %}>
+                            {{ nauczyciel }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
